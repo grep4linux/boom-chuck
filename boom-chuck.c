@@ -15,7 +15,7 @@
 #include <time.h>
 #include <sys/statvfs.h>
 
-#define APPVER 1.0
+#define APPVER 1.1
 #define NUM_OF_CORES 8
 #define MAX_PRIME 100000
 
