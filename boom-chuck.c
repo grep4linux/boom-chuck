@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
     show_limit_settings();
     if (argc == 1 ) {
         printf("Usage: boom-chuck <load generator> \n");
-        printf("       boom-chuck net <total-hits> <site> \n");
+        printf("       boom-chuck net <site> \n");
         printf("       boom-chuck cpu \n");
         printf("       boom-chuck mem \n");
         printf("       boom-chuck disk\n");
