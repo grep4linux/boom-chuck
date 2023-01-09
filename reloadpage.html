@@ -1,0 +1,79 @@
+<html>
+        <head>
+                <title>Web App</title>
+<style>
+/* Center child elements */
+body,
+.website-counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+body {
+  height: 100vh;
+}
+
+/* Styles for website counter container */
+.website-counter {
+  background-color: #ff4957;
+  height: 50px;
+  width: 80px;
+  color: white;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 25px;
+  margin-top: 10px;
+}
+
+/* Styles for reset button */
+#reset {
+  margin-top: 20px;
+  background-color: #008cba;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 8px 20px;
+  color: white;
+  border: 0;
+}
+</style>
+        </head>
+        <body style='font-family:arial;background-color:#232F3E'>
+                <h1 style='color:#FF9900;' align='center'>Web App</h1>
+                <h2 style='background-color:#232F3E; color:#FFFFFF' align='center' id='dn'></h2>
+                <p align='center'>
+                <div><p style='color:white'>Website load count:</p></div>
+                    <div class='website-counter'></div>
+                    <button id='reset'>Reset</button>
+                </p>
+                <h2 style='color:white;' align='center'>Featured video</h2>
+                <p align='center'>
+                   <iframe  width='560' height='315' src='https://www.youtube.com/embed/mxT233EdY5c?start=5' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                </p>
+                <script>
+                  let host = location.host;
+                  document.getElementById('dn').innerHTML = host  ;
+                  var counterContainer = document.querySelector('.website-counter');
+                  var resetButton = document.querySelector('#reset');
+                  var visitCount = localStorage.getItem('page_view');
+                  
+                  // Check if page_view entry is present
+                  if (visitCount) {
+                    visitCount = Number(visitCount) + 1;
+                    localStorage.setItem('page_view', visitCount);
+                  } else {
+                    visitCount = 1;
+                    localStorage.setItem('page_view', 1);
+                  }
+                  counterContainer.innerHTML = visitCount;
+                  
+                  // Adding onClick event listener
+                  resetButton.addEventListener('click', () => {
+                    visitCount = 1;
+                    localStorage.setItem('page_view', 1);
+                    counterContainer.innerHTML = visitCount;
+                  });
+                </script>
+        </body>
+</html>
