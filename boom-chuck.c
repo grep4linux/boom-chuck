@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/sysinfo.h>
 #include <errno.h>
 #include <pthread.h>
 #include <math.h>
@@ -136,13 +137,35 @@ int main(int argc, char *argv[]) {
                 printf("Forking processes to generate random numbers\n");
                 int cpid[512];
                 for (int k = 1; k < 12; k++) {
-                    for (int j = 1; j <= 2; j++) {
-                        cpid[j] = fork();
-                        printf("# Parent pid: %d \n", getppid());
-                        printf("# |--Child pid: %d \n", getpid());
-                        system("echo \"Random number:  $RANDOM\"");
-                        sleep(1);
+			printf("# ---------------------------------------\n");
+			printf("Fork Iteration: %d \n", k);
+			struct sysinfo info;
+			sysinfo(&info);
+			//printf("Uptime: %Id\n", info.uptime);
+			/*
+			printf("Load (1 minute): %Id\n", info.loads[0]);
+			printf("Number of processes: %Id\n", info.procs);
+			*/
+			int totalRam =  info.totalram;
+			int freeRam = info.freeram;
+
+			float freePercent = (float)freeRam / totalRam * 100.0;
+			printf("Total RAM (MB): %Id \n", (totalRam/1024)/1024);
+			printf("Free RAM (MB): %Id  \n", (freeRam/1024)/1024);
+			printf("# -------------------------------> Free Percent: %.2f%%  \n", freePercent);
+                    for (int j = 1; j <= 3; j++) {
+			//system("free -h");
+			if (freePercent > 20.0 ) {
+                        	cpid[j] = fork();
+                        	printf("# Parent pid: %d \n", getppid());
+                        	printf("# |--Child pid: %d \n", getpid());
+                        	system("echo \"Random number:  $RANDOM\"");
+			} else {
+				printf("Maximum memory utilization reached\n");
+				continue;
+			}	
                     }
+                    sleep(1);
                     while(wait(NULL) != -1 || errno != ECHILD) {
                         printf("Child processes to finished\n");
                     }
