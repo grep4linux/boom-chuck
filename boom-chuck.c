@@ -1,7 +1,7 @@
 /*  Decription: System load generator utility
-*   Author: Raine Curtis 
-*   Complier: gcc
-*/
+ *   Author: Raine Curtis 
+ *   Complier: gcc
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     show_header();
     printf("Arguments: %d\n", argc);
     for (int i=0; i < argc; i++) {
-            printf("%i -  %s \n", i, argv[i]);
+        printf("%i -  %s \n", i, argv[i]);
     }
     show_limit_settings();
     if (argc == 1 ) {
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
         printf("       boom-chuck cpu \n");
         printf("       boom-chuck mem \n");
         printf("       boom-chuck disk\n");
-        
+
     }
     else {
         if (argc > 1 ) {
@@ -84,25 +84,25 @@ int main(int argc, char *argv[]) {
             if ( strcmp(argv[1], "net" ) == 0) {
                 printf("Running network load generator\n");
                 if (argc == 3) {
-                char syscmd[2048];
-                strcpy(syscmd, "wget  --no-http-keep-alive --no-cache --no-cookies --header=\"Accept: text/html\" --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0\" -O /dev/null");
-                strcat(syscmd, " ");
-                strcat(syscmd, argv[2]);
-                int cpid[512];
-                for (int k = 1; k < 8; k++) {
-                    for (int j = 1; j <= 2; j++) {
-                        cpid[j] = fork();
-                        printf("# Parent pid: %d \n", getppid());
-                        printf("# |--Child pid: %d \n", getpid());
-                        printf("CMD: %s\n", syscmd);
-                        system(syscmd);
+                    char syscmd[2048];
+                    strcpy(syscmd, "wget  --no-http-keep-alive --no-cache --no-cookies --header=\"Accept: text/html\" --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0\" -O /dev/null");
+                    strcat(syscmd, " ");
+                    strcat(syscmd, argv[2]);
+                    int cpid[512];
+                    for (int k = 1; k < 8; k++) {
+                        for (int j = 1; j <= 2; j++) {
+                            cpid[j] = fork();
+                            printf("# Parent pid: %d \n", getppid());
+                            printf("# |--Child pid: %d \n", getpid());
+                            printf("CMD: %s\n", syscmd);
+                            system(syscmd);
+                        }
+                        while(wait(NULL) != -1 || errno != ECHILD) {
+                            printf("Child processes to finished\n");
+                        }
                     }
-                    while(wait(NULL) != -1 || errno != ECHILD) {
-                        printf("Child processes to finished\n");
-                    }
-                }
-                printf("Sleeping\n");
-                sleep(1);
+                    printf("Sleeping\n");
+                    sleep(1);
                 }
             }
             else if (strcmp(argv[1], "cpu") == 0) {
@@ -130,40 +130,42 @@ int main(int argc, char *argv[]) {
                 end = time(NULL);
                 run_time = (end - start);
                 printf("This machine calculated all prime numbers under %d %d times "
-                       "in %d seconds\n", MAX_PRIME, NUM_OF_CORES, run_time);
+                        "in %d seconds\n", MAX_PRIME, NUM_OF_CORES, run_time);
             }
             else if (strcmp(argv[1], "mem") == 0) {
                 printf("Running memory load generator\n");
                 printf("Forking processes to generate random numbers\n");
                 int cpid[512];
                 for (int k = 1; k < 12; k++) {
-			printf("# ---------------------------------------\n");
-			printf("Fork Iteration: %d \n", k);
-			struct sysinfo info;
-			sysinfo(&info);
-			//printf("Uptime: %Id\n", info.uptime);
-			/*
-			printf("Load (1 minute): %Id\n", info.loads[0]);
-			printf("Number of processes: %Id\n", info.procs);
-			*/
-			int totalRam =  info.totalram;
-			int freeRam = info.freeram;
+                    printf("# ---------------------------------------\n");
+                    printf("Fork Iteration: %d \n", k);
+                    struct sysinfo info;
+                    sysinfo(&info);
+                    //printf("Uptime: %Id\n", info.uptime);
+                    /*
+                       printf("Load (1 minute): %Id\n", info.loads[0]);
+                       printf("Number of processes: %Id\n", info.procs);
+                       */
+                    int totalRam =  info.totalram;
+                    int freeRam = info.freeram;
+                    int bufferRam = info.bufferram;
 
-			float freePercent = (float)freeRam / totalRam * 100.0;
-			printf("Total RAM (MB): %Id \n", (totalRam/1024)/1024);
-			printf("Free RAM (MB): %Id  \n", (freeRam/1024)/1024);
-			printf("# -------------------------------> Free Percent: %.2f%%  \n", freePercent);
-                    for (int j = 1; j <= 3; j++) {
-			//system("free -h");
-			if (freePercent > 20.0 ) {
-                        	cpid[j] = fork();
-                        	printf("# Parent pid: %d \n", getppid());
-                        	printf("# |--Child pid: %d \n", getpid());
-                        	system("echo \"Random number:  $RANDOM\"");
-			} else {
-				printf("Maximum memory utilization reached\n");
-				continue;
-			}	
+
+                    float freePercent = (float)freeRam / totalRam * 100.0;
+                    printf("Total RAM (MB): %Id \n", (totalRam/1024)/1024);
+                    printf("Free RAM (MB): %Id  \n", (freeRam/1024)/1024);
+                    printf("# -------------------------------> Free Percent: %.2f%%  \n", freePercent);
+                    for (int j = 1; j <= 2; j++) {
+                        //system("free -h");
+                        if (freePercent > 20.0 ) {
+                            cpid[j] = fork();
+                            printf("# Parent pid: %d \n", getppid());
+                            printf("# |--Child pid: %d \n", getpid());
+                            system("echo \"Random number:  $RANDOM\"");
+                        } else {
+                            printf("Maximum memory utilization reached\n");
+                            continue;
+                        }	
                     }
                     sleep(1);
                     while(wait(NULL) != -1 || errno != ECHILD) {
@@ -178,7 +180,7 @@ int main(int argc, char *argv[]) {
                     system("cat /tmp/test1.img > /dev/null");
                     system("rm /tmp/test1.img");
                 }
-                
+
             }
         }
     }
