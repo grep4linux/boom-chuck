@@ -142,10 +142,8 @@ int main(int argc, char *argv[]) {
                     struct sysinfo info;
                     sysinfo(&info);
                     //printf("Uptime: %Id\n", info.uptime);
-                    /*
                        printf("Load (1 minute): %Id\n", info.loads[0]);
                        printf("Number of processes: %Id\n", info.procs);
-                       */
                     int totalRam =  info.totalram;
                     int freeRam = info.freeram;
                     int bufferRam = info.bufferram;
@@ -153,9 +151,9 @@ int main(int argc, char *argv[]) {
 
                     float freePercent = (float)freeRam / totalRam * 100.0;
                     printf("Total RAM (MB): %Id \n", (totalRam/1024)/1024);
-                    printf("Free RAM (MB): %Id  \n", (freeRam/1024)/1024);
+                    printf("# -------------------------------> Free RAM (MB): %Id  \n", (freeRam/1024)/1024);
                     printf("# -------------------------------> Free Percent: %.2f%%  \n", freePercent);
-                    for (int j = 1; j <= 2; j++) {
+                    for (int j = 1; j <= 3; j++) {
                         //system("free -h");
                         if (freePercent > 20.0 ) {
                             cpid[j] = fork();
@@ -169,7 +167,7 @@ int main(int argc, char *argv[]) {
                     }
                     sleep(1);
                     while(wait(NULL) != -1 || errno != ECHILD) {
-                        printf("Child processes to finished\n");
+                        printf("Child processes finished\n");
                     }
                 }
             }    
