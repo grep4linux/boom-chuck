@@ -1,6 +1,6 @@
 # boom-chuck
 
-System load gneration tool.
+System load generation tool.
 
 **Be careful!!!**
 
